@@ -1,0 +1,344 @@
+{
+  "record": "106",
+  "database": "MIT-BIH Arrhythmia Database",
+  "annotator": "atr",
+  "inicio_segmento_s": 0.0,
+  "duracao_segmento_s": 30.0,
+  "frequencia_original_hz": 360,
+  "frequencia_exportada_hz": 250,
+  "total_amostras_ecg": 7500,
+  "total_anotacoes_segmento": 36,
+  "total_batimentos_referencia": 34,
+  "resumo_simbolos_batimento": {
+    "N": 34
+  },
+  "resumo_ritmos_aux": {
+    "(N\u0000": 1
+  },
+  "annotations": [
+    {
+      "sample_original": 83,
+      "sample_relativo_original": 83,
+      "sample_250hz": 58,
+      "tempo_relativo_s": 0.230556,
+      "simbolo": "~",
+      "aux_note": "",
+      "eh_batimento": false
+    },
+    {
+      "sample_original": 229,
+      "sample_relativo_original": 229,
+      "sample_250hz": 159,
+      "tempo_relativo_s": 0.636111,
+      "simbolo": "+",
+      "aux_note": "(N\u0000",
+      "eh_batimento": false
+    },
+    {
+      "sample_original": 351,
+      "sample_relativo_original": 351,
+      "sample_250hz": 244,
+      "tempo_relativo_s": 0.975,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 724,
+      "sample_relativo_original": 724,
+      "sample_250hz": 503,
+      "tempo_relativo_s": 2.011111,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 1086,
+      "sample_relativo_original": 1086,
+      "sample_250hz": 754,
+      "tempo_relativo_s": 3.016667,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 1448,
+      "sample_relativo_original": 1448,
+      "sample_250hz": 1006,
+      "tempo_relativo_s": 4.022222,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 1829,
+      "sample_relativo_original": 1829,
+      "sample_250hz": 1270,
+      "tempo_relativo_s": 5.080556,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 2197,
+      "sample_relativo_original": 2197,
+      "sample_250hz": 1526,
+      "tempo_relativo_s": 6.102778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 2571,
+      "sample_relativo_original": 2571,
+      "sample_250hz": 1785,
+      "tempo_relativo_s": 7.141667,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 2918,
+      "sample_relativo_original": 2918,
+      "sample_250hz": 2026,
+      "tempo_relativo_s": 8.105556,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 3234,
+      "sample_relativo_original": 3234,
+      "sample_250hz": 2246,
+      "tempo_relativo_s": 8.983333,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 3571,
+      "sample_relativo_original": 3571,
+      "sample_250hz": 2480,
+      "tempo_relativo_s": 9.919444,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 3931,
+      "sample_relativo_original": 3931,
+      "sample_250hz": 2730,
+      "tempo_relativo_s": 10.919444,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 4281,
+      "sample_relativo_original": 4281,
+      "sample_250hz": 2973,
+      "tempo_relativo_s": 11.891667,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 4612,
+      "sample_relativo_original": 4612,
+      "sample_250hz": 3203,
+      "tempo_relativo_s": 12.811111,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 4947,
+      "sample_relativo_original": 4947,
+      "sample_250hz": 3435,
+      "tempo_relativo_s": 13.741667,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 5255,
+      "sample_relativo_original": 5255,
+      "sample_250hz": 3649,
+      "tempo_relativo_s": 14.597222,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 5558,
+      "sample_relativo_original": 5558,
+      "sample_250hz": 3860,
+      "tempo_relativo_s": 15.438889,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 5863,
+      "sample_relativo_original": 5863,
+      "sample_250hz": 4072,
+      "tempo_relativo_s": 16.286111,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 6174,
+      "sample_relativo_original": 6174,
+      "sample_250hz": 4288,
+      "tempo_relativo_s": 17.15,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 6472,
+      "sample_relativo_original": 6472,
+      "sample_250hz": 4494,
+      "tempo_relativo_s": 17.977778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 6757,
+      "sample_relativo_original": 6757,
+      "sample_250hz": 4692,
+      "tempo_relativo_s": 18.769444,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 7045,
+      "sample_relativo_original": 7045,
+      "sample_250hz": 4892,
+      "tempo_relativo_s": 19.569444,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 7336,
+      "sample_relativo_original": 7336,
+      "sample_250hz": 5094,
+      "tempo_relativo_s": 20.377778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 7615,
+      "sample_relativo_original": 7615,
+      "sample_250hz": 5288,
+      "tempo_relativo_s": 21.152778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 7897,
+      "sample_relativo_original": 7897,
+      "sample_250hz": 5484,
+      "tempo_relativo_s": 21.936111,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 8183,
+      "sample_relativo_original": 8183,
+      "sample_250hz": 5683,
+      "tempo_relativo_s": 22.730556,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 8475,
+      "sample_relativo_original": 8475,
+      "sample_250hz": 5885,
+      "tempo_relativo_s": 23.541667,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 8758,
+      "sample_relativo_original": 8758,
+      "sample_250hz": 6082,
+      "tempo_relativo_s": 24.327778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 9025,
+      "sample_relativo_original": 9025,
+      "sample_250hz": 6267,
+      "tempo_relativo_s": 25.069444,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 9271,
+      "sample_relativo_original": 9271,
+      "sample_250hz": 6438,
+      "tempo_relativo_s": 25.752778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 9517,
+      "sample_relativo_original": 9517,
+      "sample_250hz": 6609,
+      "tempo_relativo_s": 26.436111,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 9769,
+      "sample_relativo_original": 9769,
+      "sample_250hz": 6784,
+      "tempo_relativo_s": 27.136111,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 10038,
+      "sample_relativo_original": 10038,
+      "sample_250hz": 6971,
+      "tempo_relativo_s": 27.883333,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 10315,
+      "sample_relativo_original": 10315,
+      "sample_250hz": 7163,
+      "tempo_relativo_s": 28.652778,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    },
+    {
+      "sample_original": 10583,
+      "sample_relativo_original": 10583,
+      "sample_250hz": 7349,
+      "tempo_relativo_s": 29.397222,
+      "simbolo": "N",
+      "aux_note": "",
+      "eh_batimento": true
+    }
+  ]
+}

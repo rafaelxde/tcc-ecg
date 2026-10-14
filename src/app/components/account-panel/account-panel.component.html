@@ -1,0 +1,295 @@
+<div class="account-wrapper">
+
+  @if (authService.carregando()) {
+    <div class="account-loading">
+      <span></span>
+      Verificando conta...
+    </div>
+  } @else if (!authService.autenticado()) {
+    <button
+      type="button"
+      class="enter-button"
+      (click)="abrirLogin()"
+    >
+      <span class="enter-icon">↪</span>
+      <span>Entrar</span>
+    </button>
+  } @else {
+    @if (authService.usuario(); as usuario) {
+      <button
+        type="button"
+        class="profile-button"
+        (click)="alternarMenu()"
+      >
+        @if (usuario.fotoUrl) {
+          <img
+            [src]="usuario.fotoUrl"
+            alt="Foto da conta"
+          >
+        } @else {
+          <span class="profile-avatar">{{ iniciais() }}</span>
+        }
+
+        <span class="profile-copy">
+          <small>
+            {{
+              usuario.emailVerificado
+                ? 'Conta verificada'
+                : 'Confirmação pendente'
+            }}
+          </small>
+          <strong>{{ usuario.nome }}</strong>
+          @if (!usuario.emailVerificado) {
+            <span class="email-pending">E-mail não confirmado</span>
+          }
+        </span>
+
+        <span class="profile-chevron">⌄</span>
+      </button>
+
+      @if (menuAberto) {
+        <div class="profile-menu">
+          <div class="profile-menu-header">
+            <strong>{{ usuario.nome }}</strong>
+            <span>{{ usuario.email }}</span>
+            <div class="role-badge">
+              CONTA ECG WATCH
+            </div>
+
+            <div
+              class="email-confirmation-panel"
+              [class.confirmed]="usuario.emailVerificado"
+            >
+              <div class="email-confirmation-heading">
+                <span
+                  class="verification-dot"
+                  aria-hidden="true"
+                ></span>
+                <strong>
+                  {{ usuario.emailVerificado
+                    ? 'E-mail confirmado'
+                    : 'Confirmação de e-mail pendente' }}
+                </strong>
+              </div>
+
+              @if (usuario.emailVerificado) {
+                <p>Esta conta está pronta para usar os recursos protegidos.</p>
+              } @else {
+                <p>
+                  Confirme o link enviado para {{ usuario.email }} antes de usar
+                  recursos que gravam dados de saúde.
+                </p>
+
+                @if (erroVerificacao) {
+                  <div
+                    class="email-verification-message error"
+                    role="alert"
+                  >
+                    {{ erroVerificacao }}
+                  </div>
+                }
+
+                @if (mensagemVerificacao) {
+                  <div
+                    class="email-verification-message success"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {{ mensagemVerificacao }}
+                  </div>
+                }
+
+                <div class="email-verification-actions">
+                  <button
+                    type="button"
+                    [disabled]="processandoVerificacao"
+                    (click)="atualizarConfirmacaoEmail()"
+                  >
+                    {{ processandoVerificacao ? 'Atualizando...' : 'Já confirmei' }}
+                  </button>
+
+                  <button
+                    type="button"
+                    [disabled]="processandoVerificacao"
+                    (click)="reenviarConfirmacaoEmail()"
+                  >
+                    Reenviar e-mail
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="menu-action danger"
+            (click)="sair()"
+          >
+            Sair da conta
+          </button>
+        </div>
+      }
+    }
+  }
+
+</div>
+
+@if (modalAberto) {
+  <div
+    class="account-modal-backdrop"
+    (click)="fecharModal()"
+  >
+    <section
+      class="account-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="account-modal-title"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="modal-close"
+        (click)="fecharModal()"
+        aria-label="Fechar"
+      >
+        ×
+      </button>
+
+      <div class="modal-brand">
+        <div class="modal-logo">♥</div>
+        <div>
+          <span>ECG WATCH</span>
+          <h2 id="account-modal-title">
+            {{ modo === 'login' ? 'Entrar na sua conta' : 'Criar sua conta' }}
+          </h2>
+          <p>
+            {{ modo === 'login'
+              ? 'Acesse seus relatórios e análises salvas.'
+              : 'Crie uma conta para salvar relatórios e acompanhar suas análises.' }}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="google-button"
+        [disabled]="processando"
+        (click)="entrarGoogle()"
+      >
+        <span class="google-g">G</span>
+        <span>Continuar com Google</span>
+      </button>
+
+      <div class="or-divider">
+        <span>ou</span>
+      </div>
+
+      @if (modo === 'cadastro') {
+        <label class="account-field">
+          <span>Nome</span>
+          <input
+            type="text"
+            [(ngModel)]="nome"
+            name="nomeConta"
+            autocomplete="name"
+            placeholder="Seu nome"
+          >
+        </label>
+      }
+
+      <label class="account-field">
+        <span>E-mail</span>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="emailConta"
+          autocomplete="email"
+          placeholder="voce@email.com"
+        >
+      </label>
+
+      <label class="account-field">
+        <span>Senha</span>
+        <input
+          type="password"
+          [(ngModel)]="senha"
+          name="senhaConta"
+          [attr.autocomplete]="modo === 'login' ? 'current-password' : 'new-password'"
+            [attr.minlength]="modo === 'cadastro' ? 8 : null"
+          placeholder="Sua senha"
+        >
+      </label>
+
+        @if (modo === 'cadastro') {
+          <small class="password-requirements">
+            Use ao menos 8 caracteres, com maiúscula, minúscula e número.
+          </small>
+        }
+
+      @if (modo === 'cadastro') {
+        <label class="account-field">
+          <span>Confirmar senha</span>
+          <input
+            type="password"
+            [(ngModel)]="confirmarSenha"
+            name="confirmarSenhaConta"
+            autocomplete="new-password"
+            placeholder="Digite a senha novamente"
+          >
+        </label>
+      }
+
+      @if (erro) {
+        <div class="account-message error">⚠ {{ erro }}</div>
+      }
+
+      @if (sucesso) {
+        <div class="account-message success">✓ {{ sucesso }}</div>
+      }
+
+      <button
+        type="button"
+        class="primary-account-button"
+        [disabled]="processando"
+        (click)="modo === 'login' ? entrarEmail() : cadastrar()"
+      >
+        {{ processando ? 'Aguarde...' : (modo === 'login' ? 'Entrar' : 'Criar conta') }}
+      </button>
+
+      @if (modo === 'login') {
+        <button
+          type="button"
+          class="text-account-button"
+          [disabled]="processando"
+          (click)="recuperarSenha()"
+        >
+          Esqueci minha senha
+        </button>
+
+        <div class="switch-auth">
+          <span>Ainda não possui conta?</span>
+          <button
+            type="button"
+            (click)="abrirCadastro()"
+          >
+            Criar conta
+          </button>
+        </div>
+      } @else {
+        <div class="switch-auth">
+          <span>Já possui uma conta?</span>
+          <button
+            type="button"
+            (click)="abrirLogin()"
+          >
+            Entrar
+          </button>
+        </div>
+      }
+
+      <p class="privacy-note">
+        Protótipo acadêmico • autenticação protegida pelo Firebase.
+      </p>
+    </section>
+  </div>
+}

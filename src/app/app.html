@@ -1,0 +1,2713 @@
+<div
+  class="app notranslate"
+  translate="no"
+>
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">
+        ♥
+      </div>
+
+      <div>
+        <h2>ECG Watch</h2>
+        <span>Monitor cardíaco</span>
+      </div>
+    </div>
+
+    <nav>
+
+      <a
+        [class.active]="secaoAtiva === 'dashboard'"
+        (click)="irParaSecao('dashboard')"
+      >
+        <span>▦</span>
+        Dashboard
+      </a>
+
+      <a
+        [class.active]="secaoAtiva === 'simulador'"
+        (click)="irParaSecao('simulador')"
+      >
+        <span>◉</span>
+        Simulador
+      </a>
+
+      <a
+        [class.active]="secaoAtiva === 'monitoramento'"
+        (click)="irParaSecao('monitoramento')"
+      >
+        <span>♥</span>
+        Monitoramento
+      </a>
+
+      <a
+        [class.active]="secaoAtiva === 'eventos'"
+        (click)="irParaSecao('eventos')"
+      >
+        <span>⚠</span>
+        Eventos
+      </a>
+
+      @if (authService.podeUsarDadosClinicos()) {
+
+        <a
+          [class.active]="secaoAtiva === 'historico'"
+          (click)="irParaSecao('historico')"
+        >
+          <span>◷</span>
+          Minhas análises
+        </a>
+
+      }
+
+      @if (authService.autenticado()) {
+
+        <a
+          [class.active]="secaoAtiva === 'resultados'"
+          (click)="irParaSecao('resultados')"
+        >
+          <span>▤</span>
+          Validação
+        </a>
+
+      }
+
+      @if (relatorioAtual) {
+
+        <a
+          [class.active]="secaoAtiva === 'relatorio'"
+          (click)="abrirRelatorio()"
+        >
+          <span>▧</span>
+          Relatório
+        </a>
+
+      }
+
+    </nav>
+
+    <div class="system-info">
+      <div class="online-dot"></div>
+
+      <div>
+        <strong>
+          Sistema online
+        </strong>
+
+        <span>
+          Monitoramento ativo
+        </span>
+      </div>
+    </div>
+
+  </aside>
+
+
+  <main>
+
+    <header id="dashboard">
+
+      <div>
+        <span class="eyebrow">
+          MONITORAMENTO CARDÍACO
+        </span>
+
+        <h1>
+          Dashboard ECG
+        </h1>
+
+        <p>
+          Recepção e análise de sinais de eletrocardiograma
+        </p>
+      </div>
+
+      <app-account-panel>
+      </app-account-panel>
+
+    </header>
+
+
+    <section class="cards">
+
+      <article class="card">
+
+        <div class="card-top">
+          <span>
+            FREQUÊNCIA CARDÍACA
+          </span>
+
+          <div class="icon heart">
+            ♥
+          </div>
+        </div>
+
+        <div class="value">
+          {{ bpm ?? '--' }}
+
+          <small>
+            BPM
+          </small>
+        </div>
+
+        @if (status === 'Ritmo Sinusal') {
+
+          <div class="normal">
+            ● Dentro da faixa normal
+          </div>
+
+        } @else if (status === 'Analisando sinal') {
+
+          <div class="description">
+            ● Analisando sinal
+          </div>
+
+        } @else {
+
+          <div class="warning">
+            ● Alteração detectada
+          </div>
+
+        }
+
+      </article>
+
+
+      <article class="card">
+
+        <div class="card-top">
+          <span>
+            INTERVALO R-R
+          </span>
+
+          <div class="icon">
+            ↔
+          </div>
+        </div>
+
+        <div class="value">
+          {{ rr ?? '--' }}
+
+          <small>
+            ms
+          </small>
+        </div>
+
+        <div class="description">
+          Intervalo médio
+        </div>
+
+      </article>
+
+
+      <article class="card">
+
+        <div class="card-top">
+          <span>
+            VARIABILIDADE
+          </span>
+
+          <div class="icon">
+            ≋
+          </div>
+        </div>
+
+        <div class="value">
+          {{ variabilidade ?? '--' }}
+
+          <small>
+            ms
+          </small>
+        </div>
+
+        @if (status === 'Ritmo Irregular') {
+
+          <div class="warning">
+            ● Variabilidade elevada
+          </div>
+
+        } @else if (status === 'Analisando sinal') {
+
+          <div class="description">
+            ● Calculando
+          </div>
+
+        } @else {
+
+          <div class="normal">
+            ● Regular
+          </div>
+
+        }
+
+      </article>
+
+
+      <article class="card">
+
+        <div class="card-top">
+
+          <span>
+            STATUS
+          </span>
+
+          <div class="icon shield">
+            ✓
+          </div>
+
+        </div>
+
+        <div class="status-value">
+          {{ status }}
+        </div>
+
+        @if (status === 'Ritmo Sinusal') {
+
+          <div class="normal">
+            ● Nenhuma anomalia
+          </div>
+
+        } @else if (status === 'Analisando sinal') {
+
+          <div class="description">
+            ● Coletando amostras
+          </div>
+
+        } @else {
+
+          <div class="warning">
+            ● Possível alteração
+          </div>
+
+        }
+
+      </article>
+
+    </section>
+
+
+    <section
+      class="scenario-panel"
+      id="simulador"
+    >
+
+      <div class="scenario-header">
+
+        <div>
+          <span class="eyebrow">
+            SIMULAÇÃO
+          </span>
+
+          <h3>
+            Cenário de teste
+          </h3>
+        </div>
+
+        <span class="scenario-description">
+          Selecione uma condição para simular
+          o sinal recebido pelo sistema
+        </span>
+
+      </div>
+
+
+      <div class="scenario-buttons">
+
+        <button
+          [class.active]="cenario === 'normal'"
+          (click)="selecionarCenario('normal')"
+        >
+
+          <span class="scenario-icon">
+            ♥
+          </span>
+
+          <div>
+            <strong>
+              Ritmo normal
+            </strong>
+
+            <span>
+              aproximadamente 74 BPM
+            </span>
+          </div>
+
+        </button>
+
+
+        <button
+          [class.active]="cenario === 'taquicardia'"
+          (click)="selecionarCenario('taquicardia')"
+        >
+
+          <span class="scenario-icon">
+            ↑
+          </span>
+
+          <div>
+            <strong>
+              Taquicardia
+            </strong>
+
+            <span>
+              aproximadamente 125 BPM
+            </span>
+          </div>
+
+        </button>
+
+
+        <button
+          [class.active]="cenario === 'bradicardia'"
+          (click)="selecionarCenario('bradicardia')"
+        >
+
+          <span class="scenario-icon">
+            ↓
+          </span>
+
+          <div>
+            <strong>
+              Bradicardia
+            </strong>
+
+            <span>
+              aproximadamente 48 BPM
+            </span>
+          </div>
+
+        </button>
+
+
+        <button
+          [class.active]="cenario === 'irregular'"
+          (click)="selecionarCenario('irregular')"
+        >
+
+          <span class="scenario-icon">
+            ≋
+          </span>
+
+          <div>
+            <strong>
+              Ritmo irregular
+            </strong>
+
+            <span>
+              intervalos R-R variáveis
+            </span>
+          </div>
+
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <section class="import-panel">
+
+      <div class="import-header">
+
+        <div>
+
+          <span class="eyebrow">
+            ECG EXTERNO
+          </span>
+
+          <h3>
+            Importar eletrocardiograma
+          </h3>
+
+          <p>
+            Importe um ECG em CSV ou JSON. Para smartwatch, use a exportação
+            do aplicativo companheiro com taxa de amostragem e metadados.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="import-content">
+
+        <div class="import-actions">
+
+          <label class="file-button">
+
+            <input
+              type="file"
+              accept=".csv,.json"
+              (change)="selecionarArquivo($event)"
+            >
+
+            <span>
+              ↑
+            </span>
+
+            Selecionar ECG
+
+          </label>
+
+
+          <label
+            class="file-button secondary-file"
+          >
+
+            <input
+              type="file"
+              accept=".json"
+              (change)="selecionarAnotacoes($event)"
+            >
+
+            <span>
+              ✓
+            </span>
+
+            Selecionar anotações
+
+          </label>
+
+
+          <label class="smartwatch-consent">
+
+            <input
+              type="checkbox"
+              [(ngModel)]="consentimentoSmartwatch"
+            >
+
+            <span>
+              Autorizo o uso deste dado de saúde no protótipo acadêmico.
+            </span>
+
+          </label>
+
+
+          <label
+            class="file-button smartwatch-file"
+            [class.disabled]="
+              !consentimentoSmartwatch ||
+              !authService.podeUsarDadosClinicos()
+            "
+          >
+
+            <input
+              type="file"
+              accept=".csv,.json"
+              [disabled]="
+                !consentimentoSmartwatch ||
+                !authService.podeUsarDadosClinicos()
+              "
+              (change)="selecionarArquivoSmartwatch($event)"
+            >
+
+            <span>
+              ⌚
+            </span>
+
+            Importar smartwatch
+
+          </label>
+
+          @if (!authService.podeUsarDadosClinicos()) {
+            <small class="smartwatch-access-note">
+              Entre e confirme seu e-mail para importar dados de ECG do smartwatch.
+            </small>
+          }
+
+        </div>
+
+
+        <div class="import-status-grid">
+
+          <div
+            class="import-status-card"
+            [class.loaded]="arquivoSelecionado"
+          >
+
+            <div class="import-status-top">
+
+              <span>
+                {{
+                  gravacaoAtual?.source === 'smartwatch'
+                    ? 'ECG SMARTWATCH'
+                    : 'ECG CSV / JSON'
+                }}
+              </span>
+
+              @if (arquivoSelecionado) {
+
+                <strong class="status-ok">
+                  ✓ CARREGADO
+                </strong>
+
+              } @else {
+
+                <strong class="status-waiting">
+                  AGUARDANDO
+                </strong>
+
+              }
+
+            </div>
+
+            <strong class="import-file-name">
+              {{ arquivoSelecionado ?? 'Nenhum ECG selecionado' }}
+            </strong>
+
+            @if (arquivoSelecionado) {
+
+              <small>
+                {{ amostrasArquivo.length }}
+                amostras • {{ frequenciaAmostragemAtual }} Hz
+                • {{ unidadeSinalAtual }}
+              </small>
+
+            } @else {
+
+              <small>
+                Selecione o arquivo .csv do trecho de ECG.
+              </small>
+
+            }
+
+          </div>
+
+
+          <div
+            class="import-status-card annotation-status"
+            [class.loaded]="arquivoAnotacoesSelecionado"
+          >
+
+            <div class="import-status-top">
+
+              <span>
+                ANOTAÇÕES JSON
+              </span>
+
+              @if (arquivoAnotacoesSelecionado) {
+
+                <strong class="status-ok">
+                  ✓ CARREGADO
+                </strong>
+
+              } @else {
+
+                <strong class="status-waiting">
+                  AGUARDANDO
+                </strong>
+
+              }
+
+            </div>
+
+            <strong class="import-file-name">
+              {{
+                arquivoAnotacoesSelecionado
+                ?? 'Nenhuma anotação selecionada'
+              }}
+            </strong>
+
+            @if (anotacoesReferencia) {
+
+              <small>
+                Registro
+                {{ anotacoesReferencia.record }}
+                •
+                {{
+                  anotacoesReferencia
+                    .total_batimentos_referencia
+                }}
+                batimentos de referência
+              </small>
+
+            } @else {
+
+              <small>
+                Carregue o JSON oficial para calcular
+                as métricas MIT-BIH.
+              </small>
+
+            }
+
+          </div>
+
+        </div>
+
+
+        <section class="smartwatch-panel">
+
+          <div>
+
+            <span class="eyebrow">
+              MÓDULO SMARTWATCH
+            </span>
+
+            <h4>
+              ECG de uma derivação
+            </h4>
+
+            <p>
+              Importe somente o traçado ECG exportado pelo dispositivo.
+              Frequência cardíaca comum por PPG não é um ECG.
+            </p>
+
+          </div>
+
+          @if (gravacaoAtual?.source === 'smartwatch') {
+
+            <div class="smartwatch-metadata">
+
+              <span>
+                Dispositivo
+                <strong>{{ dispositivoAtual ?? 'Não informado' }}</strong>
+              </span>
+
+              <span>
+                Derivação
+                <strong>{{ derivacaoAtual ?? 'Não informada' }}</strong>
+              </span>
+
+              <span>
+                Qualidade
+                <strong>
+                  {{
+                    qualidadeSinalAtual === 'good'
+                      ? 'Boa'
+                      : qualidadeSinalAtual === 'poor'
+                        ? 'Baixa — inconclusivo'
+                        : 'Não informada'
+                  }}
+                </strong>
+              </span>
+
+            </div>
+
+          } @else {
+
+            <small>
+              Formato recomendado: JSON com <code>samples</code>,
+              <code>samplingHz</code>, <code>unit</code>, <code>device</code>,
+              <code>lead</code> e <code>quality</code>.
+            </small>
+
+          }
+
+          <div class="smartwatch-disclaimer">
+            Resultado de apoio acadêmico: não substitui avaliação médica.
+          </div>
+
+        </section>
+
+
+        @if (
+          arquivoSelecionado &&
+          !anotacoesReferencia &&
+          gravacaoAtual?.source !== 'smartwatch'
+        ) {
+
+          <div class="annotation-warning">
+            ℹ O ECG pode ser analisado sem o JSON,
+            mas a validação de VP, FP, FN,
+            sensibilidade e precisão só será calculada
+            quando as anotações forem carregadas.
+          </div>
+
+        }
+
+
+        @if (arquivoSelecionado) {
+
+          <button
+            class="analyze-button"
+            (click)="analisarArquivo()"
+          >
+            {{
+              gravacaoAtual?.source === 'smartwatch'
+                ? '▶ Analisar ECG do smartwatch'
+                : '▶ Analisar ECG'
+            }}
+          </button>
+
+        }
+
+
+        @if (erroArquivo) {
+
+          <div class="file-error">
+            ⚠ {{ erroArquivo }}
+          </div>
+
+        }
+
+
+        @if (erroAnotacoes) {
+
+          <div class="file-error">
+            ⚠ {{ erroAnotacoes }}
+          </div>
+
+        }
+
+
+        @if (erroSmartwatch) {
+
+          <div class="file-error smartwatch-error">
+            ⚠ {{ erroSmartwatch }}
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+
+    @if (metricasValidacao) {
+
+      <section class="validation-panel">
+
+        <div class="validation-header">
+
+          <div>
+
+            <span class="eyebrow">
+              VALIDAÇÃO MIT-BIH
+            </span>
+
+            <h3>
+              Comparação com a referência
+            </h3>
+
+            <p>
+              Correspondência entre os picos R
+              detectados pelo protótipo e as
+              anotações oficiais do trecho.
+            </p>
+
+          </div>
+
+
+          @if (anotacoesReferencia) {
+
+            <div class="validation-record">
+              Registro
+              {{ anotacoesReferencia.record }}
+            </div>
+
+          }
+
+        </div>
+
+
+        <div class="validation-cards">
+
+          <div class="validation-card">
+
+            <span>
+              REFERÊNCIA
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .batimentosReferencia
+              }}
+            </strong>
+
+            <small>
+              batimentos
+            </small>
+
+          </div>
+
+
+          <div class="validation-card">
+
+            <span>
+              DETECTADOS
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .picosDetectados
+              }}
+            </strong>
+
+            <small>
+              picos R
+            </small>
+
+          </div>
+
+
+          <div
+            class="validation-card success"
+          >
+
+            <span>
+              VP
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .verdadeirosPositivos
+              }}
+            </strong>
+
+            <small>
+              corretos
+            </small>
+
+          </div>
+
+
+          <div
+            class="validation-card danger"
+          >
+
+            <span>
+              FP
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .falsosPositivos
+              }}
+            </strong>
+
+            <small>
+              extras
+            </small>
+
+          </div>
+
+
+          <div
+            class="validation-card danger"
+          >
+
+            <span>
+              FN
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .falsosNegativos
+              }}
+            </strong>
+
+            <small>
+              não detectados
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="validation-metrics">
+
+          <div>
+
+            <span>
+              Sensibilidade
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .sensibilidade
+              }}%
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Precisão
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .precisao
+              }}%
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              F1-score
+            </span>
+
+            <strong>
+              {{
+                metricasValidacao
+                  .f1Score
+              }}%
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Tolerância experimental
+            </span>
+
+            <strong>
+              ±{{
+                metricasValidacao
+                  .toleranciaMs
+              }}
+              ms
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <section
+      class="monitor"
+      id="monitoramento"
+    >
+
+      <div class="monitor-header">
+
+        <div>
+
+          <span class="eyebrow">
+            SINAL EM TEMPO REAL
+          </span>
+
+          <h2>
+            Eletrocardiograma
+          </h2>
+
+        </div>
+
+
+        <div class="monitor-actions">
+
+          @if (monitorando) {
+
+            <div class="live">
+
+              <div class="live-dot">
+              </div>
+
+              AO VIVO
+
+            </div>
+
+
+            <button
+              class="control-button stop"
+              (click)="pararMonitoramento()"
+            >
+              ■ Pausar
+            </button>
+
+          } @else {
+
+            <div class="paused">
+              ● PAUSADO
+            </div>
+
+
+            <button
+              class="control-button"
+              (click)="iniciarMonitoramento()"
+            >
+              ▶ Continuar
+            </button>
+
+          }
+
+
+          <button
+            class="control-button secondary"
+            (click)="reiniciarMonitoramento()"
+          >
+            ↻ Reiniciar
+          </button>
+
+
+          @if (!firebaseConectado) {
+
+            <button
+              class="control-button cloud"
+              (click)="conectarFirebase()"
+            >
+              ⌚ Preparar sessão
+            </button>
+
+          } @else {
+
+            <button
+              class="control-button stop"
+              (click)="desconectarFirebase()"
+            >
+              ⌚ Encerrar sessão
+            </button>
+
+          }
+
+
+          @if (picosR > 0) {
+
+            <button
+              class="control-button report-control"
+              (click)="gerarRelatorioManual()"
+            >
+              ▧ Relatório
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      @if (
+        firebaseConectado &&
+        codigoSessaoSmartwatch
+      ) {
+
+        <div class="smartwatch-session">
+
+          <div>
+            <span>SESSÃO PRIVADA DO SMARTWATCH</span>
+            <strong>{{ codigoSessaoSmartwatch }}</strong>
+          </div>
+
+          <small>
+            Use este código apenas no aplicativo companheiro autenticado com esta conta.
+          </small>
+
+        </div>
+
+      }
+
+
+      <div class="chart">
+
+        <div class="chart-info">
+
+          <span>
+            ECG
+          </span>
+
+          <strong>
+            {{ origemSinal }}
+          </strong>
+
+        </div>
+
+        <canvas #ecgCanvas>
+        </canvas>
+
+      </div>
+
+
+      <div class="monitor-footer">
+
+        <div>
+          <span>
+            Taxa de amostragem
+          </span>
+
+          <strong>
+            {{ frequenciaAmostragemAtual }} Hz
+          </strong>
+        </div>
+
+
+        <div>
+          <span>
+            Picos R detectados
+          </span>
+
+          <strong>
+            {{ picosR }}
+          </strong>
+        </div>
+
+
+        <div>
+          <span>
+            Latência
+          </span>
+
+          <strong>
+            {{ latencia }} ms
+          </strong>
+        </div>
+
+
+        <div>
+          <span>
+            Origem
+          </span>
+
+          <strong>
+            {{ origemSinal }}
+          </strong>
+        </div>
+
+
+        <div>
+          <span>
+            Qualidade do sinal
+          </span>
+
+          <strong>
+            {{
+              qualidadeSinalAtual === 'good'
+                ? 'Boa'
+                : qualidadeSinalAtual === 'poor'
+                  ? 'Inconclusiva'
+                  : 'Não informada'
+            }}
+          </strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="bottom-grid">
+
+      <article class="panel">
+
+        <div class="panel-header">
+
+          <div>
+            <span class="eyebrow">
+              ANÁLISE
+            </span>
+
+            <h3>
+              Processamento do sinal
+            </h3>
+          </div>
+
+        </div>
+
+
+        <div class="pipeline">
+
+          <div class="pipeline-item">
+
+            <div class="number">
+              01
+            </div>
+
+            <div>
+              <strong>
+                Sinal bruto
+              </strong>
+
+              <span>
+                Recepção das amostras
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="arrow">
+            →
+          </div>
+
+
+          <div class="pipeline-item">
+
+            <div class="number">
+              02
+            </div>
+
+            <div>
+              <strong>
+                Filtragem
+              </strong>
+
+              <span>
+                Remoção de ruídos
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="arrow">
+            →
+          </div>
+
+
+          <div class="pipeline-item">
+
+            <div class="number">
+              03
+            </div>
+
+            <div>
+              <strong>
+                QRS
+              </strong>
+
+              <span>
+                Detecção de picos R
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="arrow">
+            →
+          </div>
+
+
+          <div class="pipeline-item">
+
+            <div class="number">
+              04
+            </div>
+
+            <div>
+              <strong>
+                Análise
+              </strong>
+
+              <span>
+                Classificação do ritmo
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <article
+        class="panel alert-panel"
+      >
+
+        <div class="panel-header">
+
+          <div>
+            <span class="eyebrow">
+              ÚLTIMA ANÁLISE
+            </span>
+
+            <h3>
+              Situação atual
+            </h3>
+          </div>
+
+
+          @if (!possuiAlerta) {
+
+            <div class="ok-icon">
+              ✓
+            </div>
+
+          } @else {
+
+            <div class="warning-icon">
+              !
+            </div>
+
+          }
+
+        </div>
+
+
+        <div class="alert-content">
+
+          <strong
+            [class.warning-text]="possuiAlerta"
+          >
+            {{ mensagemAnalise }}
+          </strong>
+
+
+          @if (
+            status === 'Analisando sinal'
+          ) {
+
+            <p>
+              O sistema ainda está coletando
+              dados suficientes para classificar
+              o ritmo.
+            </p>
+
+          } @else if (
+            status === 'Ritmo Sinusal'
+          ) {
+
+            <p>
+              O ritmo analisado encontra-se
+              dentro dos parâmetros configurados
+              pelo protótipo.
+            </p>
+
+          } @else if (
+            status === 'Taquicardia'
+          ) {
+
+            <p>
+              O sistema identificou frequência
+              cardíaca acima do limite configurado
+              para esta análise.
+            </p>
+
+          } @else if (
+            status === 'Bradicardia'
+          ) {
+
+            <p>
+              O sistema identificou frequência
+              cardíaca abaixo do limite configurado
+              para esta análise.
+            </p>
+
+          } @else if (
+            status === 'Ritmo Irregular'
+          ) {
+
+            <p>
+              Foram identificadas variações
+              persistentes nos intervalos R-R
+              durante a janela analisada.
+            </p>
+
+          }
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <section
+      class="events-panel"
+      id="eventos"
+    >
+
+      <div class="events-header">
+
+        <div>
+
+          <span class="eyebrow">
+            HISTÓRICO
+          </span>
+
+          <h3>
+            Eventos detectados
+          </h3>
+
+        </div>
+
+
+        <div class="events-actions">
+
+          <div class="event-count">
+            {{ eventos.length }}
+            eventos
+          </div>
+
+          @if (eventos.length > 0) {
+
+            <button
+              class="clear-events-button"
+              (click)="limparHistorico()"
+            >
+              Limpar histórico
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      @if (eventos.length === 0) {
+
+        <div class="empty-events">
+
+          <div class="empty-icon">
+            ✓
+          </div>
+
+          <div>
+
+            <strong>
+              Nenhum evento registrado
+            </strong>
+
+            <span>
+              Os alertas detectados aparecerão aqui.
+            </span>
+
+          </div>
+
+        </div>
+
+      } @else {
+
+        <div class="events-table">
+
+          <div
+            class="event-row event-title"
+          >
+
+            <span>
+              HORÁRIO
+            </span>
+
+            <span>
+              EVENTO
+            </span>
+
+            <span>
+              BPM
+            </span>
+
+            <span>
+              R-R
+            </span>
+
+            <span>
+              VARIABILIDADE
+            </span>
+
+          </div>
+
+
+          @for (
+            evento of eventos;
+            track evento.id
+          ) {
+
+            <div class="event-row">
+
+              <span class="event-time">
+                {{ evento.horario }}
+              </span>
+
+              <span class="event-type">
+
+                <span class="event-warning">
+                  !
+                </span>
+
+                {{ evento.tipo }}
+
+              </span>
+
+              <strong>
+                {{ evento.bpm ?? '--' }}
+              </strong>
+
+              <strong>
+                {{ evento.rr ?? '--' }}
+                ms
+              </strong>
+
+              <strong>
+                {{
+                  evento.variabilidade
+                  ?? '--'
+                }}
+                ms
+              </strong>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+
+    @if (authService.podeUsarDadosClinicos()) {
+
+      <section
+        class="history-panel"
+        id="historico"
+      >
+
+        <div class="history-header">
+
+          <div>
+
+            <span class="eyebrow">
+              CONTA DO USUÁRIO
+            </span>
+
+            <h3>
+              Minhas análises
+            </h3>
+
+            <p>
+              Relatórios concluídos enquanto
+              esta conta estava conectada.
+              Os resumos ficam associados ao
+              usuário no Firebase.
+            </p>
+
+          </div>
+
+
+          @if (
+            authService.usuario();
+            as usuario
+          ) {
+
+            <div class="history-user-badge">
+
+              <span>
+                {{
+                  usuario.emailVerificado
+                    ? 'CONTA VERIFICADA'
+                    : 'E-MAIL PENDENTE'
+                }}
+              </span>
+
+              <strong>
+                {{ usuario.nome }}
+              </strong>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        @if (historicoCarregando) {
+
+          <div class="history-empty">
+            Carregando histórico da conta...
+          </div>
+
+        } @else if (
+          historicoAnalises.length === 0
+        ) {
+
+          <div class="history-empty">
+
+            <strong>
+              Nenhuma análise salva nesta conta.
+            </strong>
+
+            <span>
+              Conclua um ECG para o relatório
+              aparecer aqui automaticamente.
+            </span>
+
+          </div>
+
+        } @else {
+
+          <div class="history-list">
+
+            @for (
+              analise of historicoAnalises;
+              track analise.id
+            ) {
+
+              <article class="history-item">
+
+                <div class="history-main">
+
+                  <div class="history-status">
+                    ♥
+                  </div>
+
+                  <div>
+
+                    <span>
+                      {{
+                        formatarDataRelatorio(
+                          analise.geradoEm
+                        )
+                      }}
+                    </span>
+
+                    <strong>
+                      {{
+                        analise.statusFinal
+                      }}
+                    </strong>
+
+                    <small>
+                      {{
+                        analise.tipoAnalise
+                      }}
+                      •
+                      {{
+                        analise.origem
+                      }}
+                    </small>
+
+                  </div>
+
+                </div>
+
+
+                <div class="history-metrics">
+
+                  <div>
+
+                    <span>
+                      BPM
+                    </span>
+
+                    <strong>
+                      {{
+                        analise.bpm
+                        ?? '--'
+                      }}
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      R-R
+                    </span>
+
+                    <strong>
+                      {{
+                        analise.rr
+                        ?? '--'
+                      }}
+                      ms
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      Picos R
+                    </span>
+
+                    <strong>
+                      {{
+                        analise.picosR
+                      }}
+                    </strong>
+
+                  </div>
+
+                </div>
+
+
+                <div class="history-actions">
+
+                  <button
+                    type="button"
+                    class="history-open"
+                    (click)="
+                      abrirAnaliseHistorico(
+                        analise
+                      )
+                    "
+                  >
+                    Ver relatório
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="history-delete"
+                    (click)="
+                      excluirAnaliseHistorico(
+                        analise
+                      )
+                    "
+                  >
+                    Excluir
+                  </button>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        }
+
+      </section>
+
+    }
+
+
+    @if (authService.autenticado()) {
+
+      <section
+        class="results-panel"
+        id="resultados"
+      >
+
+        <div class="results-header">
+
+          <div>
+
+            <span class="eyebrow">
+              VALIDAÇÃO EXPERIMENTAL
+            </span>
+
+            <h3>
+              Validação do algoritmo MIT-BIH
+            </h3>
+
+            <p>
+              Cada análise concluída com CSV +
+              JSON é salva automaticamente neste
+              navegador. Repetir o mesmo registro
+              e trecho atualiza o resultado
+              existente em vez de duplicá-lo.
+            </p>
+
+          </div>
+
+
+          @if (
+            resultadosValidacao.length > 0
+          ) {
+
+            <button
+              class="clear-results-button"
+              (click)="limparResultados()"
+            >
+              Limpar resultados
+            </button>
+
+          }
+
+        </div>
+
+
+        @if (
+          resultadosValidacao.length === 0
+        ) {
+
+          <div class="empty-results">
+
+            <div class="empty-icon">
+              ▤
+            </div>
+
+            <div>
+
+              <strong>
+                Nenhuma validação salva
+              </strong>
+
+              <span>
+                Analise um ECG MIT-BIH com
+                o respectivo JSON de referência.
+              </span>
+
+            </div>
+
+          </div>
+
+        } @else {
+
+          <div class="results-summary">
+
+            <div class="result-summary-card">
+
+              <span>
+                SEGMENTOS
+              </span>
+
+              <strong>
+                {{
+                  totalSegmentosValidados
+                }}
+              </strong>
+
+              <small>
+                validados
+              </small>
+
+            </div>
+
+
+            <div class="result-summary-card">
+
+              <span>
+                REFERÊNCIA
+              </span>
+
+              <strong>
+                {{
+                  totalBatimentosReferencia
+                }}
+              </strong>
+
+              <small>
+                batimentos
+              </small>
+
+            </div>
+
+
+            <div
+              class="
+                result-summary-card
+                success
+              "
+            >
+
+              <span>
+                VP
+              </span>
+
+              <strong>
+                {{
+                  totalVerdadeirosPositivos
+                }}
+              </strong>
+
+              <small>
+                corretos
+              </small>
+
+            </div>
+
+
+            <div
+              class="
+                result-summary-card
+                danger
+              "
+            >
+
+              <span>
+                FP
+              </span>
+
+              <strong>
+                {{
+                  totalFalsosPositivos
+                }}
+              </strong>
+
+              <small>
+                extras
+              </small>
+
+            </div>
+
+
+            <div
+              class="
+                result-summary-card
+                danger
+              "
+            >
+
+              <span>
+                FN
+              </span>
+
+              <strong>
+                {{
+                  totalFalsosNegativos
+                }}
+              </strong>
+
+              <small>
+                perdidos
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="results-global-metrics">
+
+            <div>
+
+              <span>
+                Sensibilidade global
+              </span>
+
+              <strong>
+                {{
+                  sensibilidadeGlobal
+                }}%
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Precisão global
+              </span>
+
+              <strong>
+                {{
+                  precisaoGlobal
+                }}%
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                F1 global
+              </span>
+
+              <strong>
+                {{
+                  f1Global
+                }}%
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Latência média
+              </span>
+
+              <strong>
+                {{
+                  latenciaMediaGlobal
+                }}
+                ms
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="results-table-wrap">
+
+            <div
+              class="
+                results-row
+                results-title
+              "
+            >
+
+              <span>REGISTRO</span>
+              <span>REF.</span>
+              <span>DET.</span>
+              <span>VP</span>
+              <span>FP</span>
+              <span>FN</span>
+              <span>SENS.</span>
+              <span>PREC.</span>
+              <span>F1</span>
+              <span>STATUS FINAL</span>
+
+            </div>
+
+
+            @for (
+              resultado of resultadosValidacao;
+              track resultado.id
+            ) {
+
+              <div class="results-row">
+
+                <strong>
+                  {{
+                    resultado.registro
+                  }}
+                </strong>
+
+                <span>
+                  {{
+                    resultado.referencia
+                  }}
+                </span>
+
+                <span>
+                  {{
+                    resultado.detectados
+                  }}
+                </span>
+
+                <span class="metric-ok">
+                  {{
+                    resultado
+                      .verdadeirosPositivos
+                  }}
+                </span>
+
+                <span
+                  [class.metric-error]="
+                    resultado
+                      .falsosPositivos > 0
+                  "
+                >
+                  {{
+                    resultado
+                      .falsosPositivos
+                  }}
+                </span>
+
+                <span
+                  [class.metric-error]="
+                    resultado
+                      .falsosNegativos > 0
+                  "
+                >
+                  {{
+                    resultado
+                      .falsosNegativos
+                  }}
+                </span>
+
+                <span>
+                  {{
+                    resultado
+                      .sensibilidade
+                  }}%
+                </span>
+
+                <span>
+                  {{
+                    resultado
+                      .precisao
+                  }}%
+                </span>
+
+                <strong>
+                  {{
+                    resultado
+                      .f1Score
+                  }}%
+                </strong>
+
+                <span
+                  class="result-status"
+                  [class.result-status-alert]="
+                    resultado.statusFinal
+                    !== 'Ritmo Sinusal'
+                  "
+                >
+                  {{
+                    resultado
+                      .statusFinal
+                  }}
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </section>
+
+    }
+
+
+    @if (
+      relatorioAtual &&
+      relatorioVisivel
+    ) {
+
+      <section
+        class="report-panel"
+        id="relatorio"
+      >
+
+        <div class="report-header">
+
+          <div>
+
+            <span class="eyebrow">
+              RELATÓRIO DA ANÁLISE
+            </span>
+
+            <h3>
+              Resumo do eletrocardiograma
+            </h3>
+
+            <p>
+              Gerado em
+              {{
+                formatarDataRelatorio(
+                  relatorioAtual.geradoEm
+                )
+              }}
+            </p>
+
+          </div>
+
+
+          <div class="report-actions">
+
+            <button
+              class="
+                report-button
+                secondary-report
+              "
+              type="button"
+              (click)="fecharRelatorio()"
+            >
+              Fechar
+            </button>
+
+
+            <button
+              class="report-button"
+              type="button"
+              (click)="imprimirRelatorio()"
+            >
+              ⎙ Imprimir relatório
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="report-status">
+
+          <div>
+
+            <span>
+              STATUS FINAL
+            </span>
+
+            <strong>
+              {{
+                relatorioAtual.statusFinal
+              }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              FREQUÊNCIA
+            </span>
+
+            <strong>
+              {{
+                relatorioAtual.bpm
+                ?? '--'
+              }}
+
+              <small>
+                BPM
+              </small>
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              INTERVALO R-R
+            </span>
+
+            <strong>
+              {{
+                relatorioAtual.rr
+                ?? '--'
+              }}
+
+              <small>
+                ms
+              </small>
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              VARIABILIDADE
+            </span>
+
+            <strong>
+              {{
+                relatorioAtual
+                  .variabilidade
+                ?? '--'
+              }}
+
+              <small>
+                ms
+              </small>
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="report-grid">
+
+          <article class="report-card">
+
+            <span class="report-card-title">
+              DADOS DA ANÁLISE
+            </span>
+
+
+            <div class="report-line">
+
+              <span>
+                Usuário
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .usuarioNome
+                  ?? 'Sessão local'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                E-mail
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .usuarioEmail
+                  ?? '--'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Tipo
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .tipoAnalise
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Origem
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .origem
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Arquivo
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual.arquivo
+                  ?? 'Não se aplica'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Dispositivo
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual.dispositivo
+                  ?? 'Não informado'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Derivação / unidade
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual.derivacao
+                  ?? '--'
+                }}
+                •
+                {{
+                  relatorioAtual.unidade
+                  ?? '--'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Qualidade do sinal
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual.qualidadeSinal === 'good'
+                    ? 'Boa'
+                    : relatorioAtual.qualidadeSinal === 'poor'
+                      ? 'Baixa / inconclusiva'
+                      : 'Não informada'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Registro MIT-BIH
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual.registro
+                  ?? '--'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Amostras processadas
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .totalAmostras
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Picos R detectados
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .picosR
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="report-line">
+
+              <span>
+                Latência média
+              </span>
+
+              <strong>
+                {{
+                  relatorioAtual
+                    .latenciaMediaMs
+                  ?? '--'
+                }}
+                ms
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <article class="report-card">
+
+            <span class="report-card-title">
+              VALIDAÇÃO EXPERIMENTAL
+            </span>
+
+
+            @if (
+              relatorioAtual.validacao;
+              as validacao
+            ) {
+
+              <div class="report-metrics">
+
+                <div>
+
+                  <span>
+                    Sensibilidade
+                  </span>
+
+                  <strong>
+                    {{
+                      validacao
+                        .sensibilidade
+                    }}%
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>
+                    Precisão
+                  </span>
+
+                  <strong>
+                    {{
+                      validacao
+                        .precisao
+                    }}%
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>
+                    F1-score
+                  </span>
+
+                  <strong>
+                    {{
+                      validacao
+                        .f1Score
+                    }}%
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <div class="report-line">
+
+                <span>
+                  Batimentos de referência
+                </span>
+
+                <strong>
+                  {{
+                    validacao
+                      .batimentosReferencia
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="report-line">
+
+                <span>
+                  Verdadeiros positivos
+                </span>
+
+                <strong>
+                  {{
+                    validacao
+                      .verdadeirosPositivos
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="report-line">
+
+                <span>
+                  Falsos positivos
+                </span>
+
+                <strong>
+                  {{
+                    validacao
+                      .falsosPositivos
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="report-line">
+
+                <span>
+                  Falsos negativos
+                </span>
+
+                <strong>
+                  {{
+                    validacao
+                      .falsosNegativos
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="report-line">
+
+                <span>
+                  Tolerância
+                </span>
+
+                <strong>
+                  ±{{
+                    validacao
+                      .toleranciaMs
+                  }}
+                  ms
+                </strong>
+
+              </div>
+
+            } @else {
+
+              <div
+                class="
+                  report-empty-validation
+                "
+              >
+                Nenhum arquivo de anotações
+                de referência foi utilizado
+                nesta análise.
+              </div>
+
+            }
+
+          </article>
+
+        </div>
+
+
+        <div class="report-warning">
+
+          <strong>
+            Uso acadêmico:
+          </strong>
+
+          este relatório é gerado
+          automaticamente pelo protótipo
+          ECG Watch e não representa
+          diagnóstico médico nem substitui
+          avaliação de um profissional
+          de saúde.
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <footer>
+
+      <span>
+        ECG Watch • Protótipo acadêmico
+      </span>
+
+      <span>
+        Ferramenta de apoio —
+        não substitui avaliação médica
+      </span>
+
+    </footer>
+
+  </main>
+
+</div>

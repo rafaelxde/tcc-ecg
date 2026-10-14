@@ -1,0 +1,456 @@
+:host {
+  display: block;
+  position: relative;
+  --green: #20a77a;
+  --green-strong: #17815e;
+  --green-soft: #15362d;
+  --bg: #080d0c;
+  --panel: #0e1513;
+  --panel-2: #121c19;
+  --border: #24352f;
+  --text: #edf6f2;
+  --muted: #879b93;
+}
+
+* { box-sizing: border-box; }
+button, input { font: inherit; }
+
+.account-wrapper { position: relative; }
+
+.enter-button,
+.profile-button {
+  border: 1px solid #29443a;
+  background: #0f1815;
+  color: var(--text);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.enter-button:hover,
+.profile-button:hover {
+  background: #14231e;
+  border-color: #39705c;
+}
+
+.enter-button {
+  min-height: 42px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 750;
+}
+
+.enter-icon { color: #5fd7ae; }
+
+.profile-button {
+  min-height: 50px;
+  padding: 6px 10px 6px 7px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.profile-button img,
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.profile-button img { object-fit: cover; }
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  color: #08110e;
+  background: #55d6ab;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.profile-copy { min-width: 115px; max-width: 190px; }
+.profile-copy small,
+.profile-copy strong,
+.profile-copy .email-pending { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.profile-copy small { color: #67cbaa; font-size: 9px; margin-bottom: 3px; }
+.profile-copy strong { color: #eef8f4; font-size: 11px; }
+.profile-copy .email-pending { margin-top: 3px; color: #f4bf71; font-size: 8px; font-weight: 750; }
+.profile-chevron { color: #738a81; }
+
+.account-loading {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.account-loading > span {
+  width: 11px;
+  height: 11px;
+  border: 2px solid #24453a;
+  border-top-color: #58d8ad;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+.profile-menu {
+  position: absolute;
+  z-index: 80;
+  right: 0;
+  top: calc(100% + 9px);
+  width: 270px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #0c1311;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+}
+
+.profile-menu-header { padding: 10px; border-bottom: 1px solid #1d2b26; }
+.profile-menu-header strong,
+.profile-menu-header span { display: block; }
+.profile-menu-header strong { color: #edf6f2; font-size: 12px; }
+.profile-menu-header span { margin-top: 4px; color: var(--muted); font-size: 10px; word-break: break-all; }
+
+.role-badge {
+  width: fit-content;
+  margin-top: 10px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: #7ee4be;
+  background: #122b23;
+  border: 1px solid #244c3e;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .8px;
+}
+
+.email-confirmation-panel {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #5a4725;
+  border-radius: 8px;
+  color: #f1d89a;
+  background: #261d10;
+}
+
+.email-confirmation-panel.confirmed {
+  border-color: #255645;
+  color: #8de6c1;
+  background: #10241d;
+}
+
+.email-confirmation-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.email-confirmation-heading strong {
+  color: inherit;
+  font-size: 10px;
+}
+
+.verification-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #e6aa50;
+  box-shadow: 0 0 0 3px rgba(230, 170, 80, .12);
+}
+
+.confirmed .verification-dot {
+  background: #58d9ad;
+  box-shadow: 0 0 0 3px rgba(88, 217, 173, .12);
+}
+
+.email-confirmation-panel p {
+  margin: 7px 0 0;
+  color: #ccb985;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.email-confirmation-panel.confirmed p { color: #89bda8; }
+
+.email-verification-message {
+  margin-top: 8px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.email-verification-message.error {
+  color: #ffb3ba;
+  border: 1px solid #5a2a30;
+  background: #241517;
+}
+
+.email-verification-message.success {
+  color: #8be7c5;
+  border: 1px solid #285545;
+  background: #13251f;
+}
+
+.email-verification-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.email-verification-actions button {
+  min-height: 31px;
+  padding: 6px;
+  border: 1px solid #7b6539;
+  border-radius: 6px;
+  color: #f4d99c;
+  background: #2e2413;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.email-verification-actions button:hover:not(:disabled) {
+  border-color: #d0a34e;
+  background: #3a2d16;
+}
+
+.email-verification-actions button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.password-requirements {
+  display: block;
+  margin: 7px 0 12px;
+  color: #879b91;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.menu-action {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #c5d4ce;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-action:hover { background: #131e1a; }
+.menu-action.danger:hover { color: #ffadb4; background: #241719; }
+
+.account-modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, .78);
+  backdrop-filter: blur(6px);
+}
+
+.account-modal {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 30px;
+  border: 1px solid #263a33;
+  border-radius: 16px;
+  background: #0b1210;
+  color: var(--text);
+  box-shadow: 0 35px 100px rgba(0,0,0,.58);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #263831;
+  border-radius: 8px;
+  color: #8da097;
+  background: #111a17;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.modal-close:hover { color: #fff; background: #18231f; }
+
+.modal-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 38px 20px 0;
+  border-bottom: 1px solid #1d2b26;
+}
+
+.modal-logo {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #07100d;
+  background: #50d3a7;
+  font-size: 20px;
+  box-shadow: 0 8px 24px rgba(32,167,122,.18);
+}
+
+.modal-brand > div:last-child > span {
+  color: #63d7b0;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 1.7px;
+}
+
+.modal-brand h2 {
+  margin: 4px 0 0;
+  color: #f1f7f5;
+  font-size: 23px;
+  letter-spacing: -.35px;
+}
+
+.modal-brand p {
+  margin: 6px 0 0;
+  color: #82958d;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.google-button,
+.primary-account-button {
+  width: 100%;
+  min-height: 47px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 760;
+}
+
+.google-button {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #dce9e4;
+  background: #101916;
+  border: 1px solid #2a3d36;
+}
+
+.google-button:hover { background: #15201c; border-color: #3b594e; }
+
+.google-g {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: #6ce0b8;
+  background: #173128;
+  font-weight: 900;
+}
+
+.or-divider {
+  margin: 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #62756d;
+  font-size: 10px;
+}
+
+.or-divider::before,
+.or-divider::after { content: ''; height: 1px; flex: 1; background: #1f2e29; }
+
+.account-field { display: block; margin-top: 13px; }
+.account-field span { display: block; margin-bottom: 7px; color: #a8bab2; font-size: 10px; font-weight: 700; }
+
+.account-field input {
+  width: 100%;
+  min-height: 47px;
+  padding: 0 13px;
+  outline: none;
+  border: 1px solid #2a3c35;
+  border-radius: 9px;
+  color: #eef6f3;
+  background: #101916;
+}
+
+.account-field input::placeholder { color: #53665e; }
+.account-field input:focus { border-color: #3da77f; box-shadow: 0 0 0 3px rgba(61,167,127,.11); background: #111c18; }
+
+.account-message {
+  margin-top: 14px;
+  padding: 11px 12px;
+  border-radius: 8px;
+  font-size: 10px;
+  line-height: 1.45;
+}
+.account-message.error { color: #ffb3ba; border: 1px solid #5a2a30; background: #241517; }
+.account-message.success { color: #8be7c5; border: 1px solid #285545; background: #13251f; }
+
+.primary-account-button {
+  margin-top: 18px;
+  border: 1px solid #23956f;
+  background: #23956f;
+  color: #06100d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.primary-account-button:hover:not(:disabled) { background: #2bb282; border-color: #2bb282; }
+
+.google-button:disabled,
+.primary-account-button:disabled,
+.text-account-button:disabled { opacity: .55; cursor: wait; }
+
+.text-account-button {
+  width: 100%;
+  margin-top: 11px;
+  border: 0;
+  background: transparent;
+  color: #67d9b3;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.switch-auth {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #7d9088;
+  font-size: 10px;
+}
+
+.switch-auth button { border: 0; background: transparent; color: #69d8b3; cursor: pointer; font-weight: 750; padding: 0; }
+.privacy-note { margin: 20px 0 0; text-align: center; color: #566961; font-size: 9px; line-height: 1.5; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 650px) {
+  .profile-copy { display: none; }
+  .account-modal-backdrop { padding: 12px; }
+  .account-modal { padding: 24px 18px; }
+  .modal-brand { align-items: flex-start; }
+  .switch-auth { flex-wrap: wrap; }
+}
