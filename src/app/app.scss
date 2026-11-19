@@ -5205,3 +5205,311 @@ footer {
     display: grid;
   }
 }
+
+/* Acabamento visual do painel e navegação responsiva */
+:host {
+  --clinic-muted: #a1b5ac;
+  --panel-radius: 18px;
+  color-scheme: dark;
+}
+
+.app {
+  background: radial-gradient(ellipse at 90% 0, #142c23, transparent 38rem),
+    var(--clinic-bg) !important;
+}
+
+.sidebar {
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  background: linear-gradient(165deg, #111f19, var(--clinic-sidebar) 60%) !important;
+}
+
+.logo-icon {
+  flex: 0 0 43px;
+  background: linear-gradient(145deg, #a2f6d7, #43ca9b) !important;
+  border-radius: 13px !important;
+}
+
+.logo span,
+.system-info span,
+nav a {
+  color: var(--clinic-muted) !important;
+}
+
+nav a {
+  border-radius: 11px !important;
+  font-weight: 550;
+}
+
+nav a span {
+  width: 1.2em;
+  text-align: center;
+}
+
+nav a.active {
+  color: #a5f4d8 !important;
+  background: linear-gradient(105deg, #1b3b30, #132721) !important;
+  border-color: #2b5546 !important;
+  box-shadow: none !important;
+  font-weight: 700;
+}
+
+#dashboard {
+  gap: 16px;
+  padding: clamp(20px, 3vw, 36px);
+  border: 1px solid #2a493d;
+  border-radius: var(--panel-radius);
+  background:
+    linear-gradient(105deg, #11241e 12%, #11241eeb 52%, #10251f70),
+    repeating-linear-gradient(90deg, #86deb01a 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, #86deb01a 0 1px, transparent 1px 28px),
+    #10251f;
+}
+
+#dashboard h1 {
+  margin: 8px 0;
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -.045em;
+}
+
+#dashboard p {
+  color: #b2c7be !important;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+:is(.card, .panel, .monitor, .scenario-panel, .events-panel, .import-panel,
+    .validation-panel, .results-panel, .report-panel, .history-panel) {
+  min-width: 0;
+  border-radius: var(--panel-radius) !important;
+}
+
+.card {
+  padding: clamp(16px, 1.45vw, 22px);
+  background: linear-gradient(145deg, #172820, #0f1915 76%) !important;
+}
+
+.card:first-child {
+  background: linear-gradient(145deg, #19392d, #101d17 76%) !important;
+  border-color: #315c4c !important;
+}
+
+.card::before {
+  content: none;
+}
+
+.card-top {
+  gap: 8px;
+  color: #b0c4ba !important;
+  font-size: 10px;
+  letter-spacing: .07em;
+}
+
+.card-top .icon {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  background: #19362c !important;
+  border-color: #2d5143 !important;
+  border-radius: 10px !important;
+}
+
+.value {
+  font-size: clamp(29px, 2.8vw, 40px);
+  letter-spacing: -.045em;
+}
+
+.value small {
+  color: var(--clinic-muted);
+  letter-spacing: 0;
+}
+
+.value,
+.validation-card strong,
+.validation-metrics strong,
+.result-summary-card strong,
+.monitor-footer strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.status-value {
+  font-size: clamp(16px, 1.65vw, 22px);
+  letter-spacing: -.025em;
+}
+
+.card :is(.normal, .description, .warning) {
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.card .description,
+.scenario-description,
+.scenario-buttons span,
+.import-header p,
+.import-status-card small,
+.monitor-footer span,
+.results-header p,
+.report-header p,
+.history-header p {
+  color: var(--clinic-muted) !important;
+}
+
+.scenario-header h3,
+.import-header h3 {
+  font-size: 18px;
+}
+
+.scenario-description,
+.scenario-buttons strong,
+.import-header p,
+.import-file-name {
+  font-size: 12px;
+}
+
+.scenario-buttons span:not(.scenario-icon),
+.import-status-card small {
+  font-size: 11px;
+}
+
+.scenario-buttons button {
+  border-radius: 13px !important;
+}
+
+.scenario-buttons button.active {
+  border-color: #478e73 !important;
+  box-shadow: inset 0 0 0 1px #478e73 !important;
+}
+
+.monitor {
+  padding: clamp(16px, 2vw, 26px) !important;
+}
+
+.monitor-header,
+.monitor-actions {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.monitor h2 {
+  font-size: 22px;
+}
+
+.chart {
+  background-color: #091510 !important;
+  border-color: #244136 !important;
+  border-radius: 13px !important;
+}
+
+.control-button {
+  min-height: 34px;
+  font-size: 11px;
+}
+
+.control-button.stop {
+  color: #ffb2bb !important;
+  background: #25191c !important;
+  border-color: #52343a !important;
+}
+
+.control-button.cloud {
+  color: #a4dcff !important;
+  background: #11232e !important;
+  border-color: #295269 !important;
+}
+
+.control-button:hover:not(:disabled) {
+  border-color: #64877a !important;
+}
+
+.app :is(button:focus-visible, .file-button:has(input:focus-visible)) {
+  outline: 2px solid #83e9c6;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    display: grid;
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 14px 16px 8px;
+    gap: 10px;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--clinic-border);
+  }
+
+  .logo {
+    padding: 0;
+  }
+
+  nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  nav a {
+    padding: 8px;
+    gap: 5px;
+    font-size: 12px;
+  }
+
+  .sidebar .system-info {
+    display: none;
+  }
+
+  main {
+    min-width: 0;
+    padding: 16px;
+  }
+
+  #dashboard {
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .scenario-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .card {
+    padding: 12px;
+  }
+
+  .card-top {
+    font-size: 9px;
+    letter-spacing: .025em;
+  }
+
+  .card-top .icon {
+    flex-basis: 26px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .import-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nav a,
+  .app button {
+    transition: none;
+  }
+}
